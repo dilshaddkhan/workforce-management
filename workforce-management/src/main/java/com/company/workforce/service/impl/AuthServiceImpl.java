@@ -1,9 +1,6 @@
 package com.company.workforce.service.impl;
 
-import com.company.workforce.dto.AuthResponse;
-import com.company.workforce.dto.LoginRequest;
-import com.company.workforce.dto.LoginResponse;
-import com.company.workforce.dto.RegisterRequest;
+import com.company.workforce.dto.*;
 import com.company.workforce.exception.UserAlreadyExistsException;
 import com.company.workforce.repository.UserRepository;
 import com.company.workforce.role.RoleType;
@@ -11,8 +8,10 @@ import com.company.workforce.security.JwtService;
 import com.company.workforce.service.AuthService;
 import com.company.workforce.user.User;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -121,6 +120,32 @@ public class AuthServiceImpl
         return new LoginResponse(
                 token,
                 "Bearer"
+        );
+    }
+
+    @Override
+    public UserProfileResponse getCurrentUser() {
+
+        String username =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName();
+
+        User user =
+                userRepository
+                        .findByUsername(username)
+                        .orElseThrow(
+                                () -> new ResourceNotFoundException(
+                                        "User not found"
+                                )
+                        );
+
+        return new UserProfileResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole().name()
         );
     }
 }

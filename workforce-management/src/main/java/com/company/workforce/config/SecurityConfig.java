@@ -1,6 +1,8 @@
 package com.company.workforce.config;
+import com.company.workforce.exception.CustomAccessDeniedHandler;
 import com.company.workforce.filter.JwtAuthenticationFilter;
 import com.company.workforce.security.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomUserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
    /* @Bean
@@ -68,16 +71,30 @@ public class SecurityConfig {
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**",
                                         "/swagger-ui.html",
-                                        "/api/v1/auth/**"
+                                        "/api/v1/auth/register",
+                                        "/api/v1/auth/login"
+
                                 )
                                 .permitAll()
 
                                 .anyRequest()
                                 .authenticated()
+                ).exceptionHandling(exception -> exception
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(
+                                (request, response, ex) -> {
+                                    response.sendError(
+                                            HttpServletResponse.SC_UNAUTHORIZED,
+                                            "Unauthorized"
+                                    );
+                                }
+                        )
                 )
-
                 .authenticationProvider(
-                        authenticationProvider
+                        authenticationProvider(
+                                userDetailsService,
+                                passwordEncoder()
+                        )
                 )
 
                 .addFilterBefore(

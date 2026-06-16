@@ -1,9 +1,6 @@
 package com.company.workforce.service;
 
-import com.company.workforce.dto.AuthResponse;
-import com.company.workforce.dto.LoginRequest;
-import com.company.workforce.dto.LoginResponse;
-import com.company.workforce.dto.RegisterRequest;
+import com.company.workforce.dto.*;
 
 public interface AuthService {
 
@@ -14,4 +11,5 @@ public interface AuthService {
     LoginResponse login(
             LoginRequest request
     );
+    public UserProfileResponse getCurrentUser();
 }

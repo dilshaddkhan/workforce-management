@@ -2,8 +2,10 @@ package com.company.workforce.controller;
 
 import com.company.workforce.dto.*;
 import com.company.workforce.service.AuthService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -49,4 +51,21 @@ public class AuthController {
                 )
         );
     }
+
+    @GetMapping("/me")
+    @SecurityRequirement(name = "bearerAuth")
+    public ApiResponse<UserProfileResponse> me() {
+
+        System.out.println(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+        );
+        return new ApiResponse<>(
+                true,
+                "User fetched successfully",
+                authService.getCurrentUser()
+        );
+    }
+
 }

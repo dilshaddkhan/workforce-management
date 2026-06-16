@@ -31,9 +31,10 @@ public class JwtAuthenticationFilter
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-
+        System.out.println("JWT Filter Executed");
         String authHeader =
                 request.getHeader("Authorization");
+        System.out.println("Authorization" + authHeader);
 
         if (
                 authHeader == null ||
@@ -45,10 +46,10 @@ public class JwtAuthenticationFilter
 
         String token =
                 authHeader.substring(7);
-
+        System.out.println("Token = " + token);
         String username =
                 jwtService.extractUsername(token);
-
+        System.out.println("Username = " + username);
         if (
                 username != null &&
                         SecurityContextHolder
@@ -59,7 +60,7 @@ public class JwtAuthenticationFilter
             UserDetails userDetails =
                     userDetailsService
                             .loadUserByUsername(username);
-
+            System.out.println("User Loaded = " + userDetails.getUsername());
             if (
                     jwtService.isTokenValid(
                             token,
@@ -82,6 +83,13 @@ public class JwtAuthenticationFilter
                 SecurityContextHolder
                         .getContext()
                         .setAuthentication(authToken);
+
+                System.out.println(
+                        "Authentication Stored = "
+                                + SecurityContextHolder
+                                .getContext()
+                                .getAuthentication()
+                );
             }
         }
 

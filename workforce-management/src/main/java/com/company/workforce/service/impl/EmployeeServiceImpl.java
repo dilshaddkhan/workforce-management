@@ -2,10 +2,7 @@ package com.company.workforce.service.impl;
 
 import com.company.workforce.constants.PaginationConstants;
 import com.company.workforce.constants.SortDirection;
-import com.company.workforce.dto.EmployeeFilterRequest;
-import com.company.workforce.dto.EmployeeRequest;
-import com.company.workforce.dto.EmployeeResponse;
-import com.company.workforce.dto.PageResponse;
+import com.company.workforce.dto.*;
 import com.company.workforce.entity.Employee;
 import com.company.workforce.exception.DuplicateEmployeeException;
 import com.company.workforce.exception.EmployeeNotFoundException;
@@ -17,6 +14,7 @@ import com.company.workforce.repository.EmployeeRepository;
 import com.company.workforce.service.EmployeeService;
 import com.company.workforce.specification.EmployeeSpecification;
 import com.company.workforce.specification.EmployeeSpecificationBuilder;
+import com.company.workforce.user.User;
 import com.company.workforce.util.PaginationUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -262,4 +261,5 @@ return repository.findAll().stream().filter((employee -> employee.getSalary().co
                 responses
         );
     }
+
 }

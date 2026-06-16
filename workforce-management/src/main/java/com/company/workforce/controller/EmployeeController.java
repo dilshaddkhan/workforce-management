@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<EmployeeResponse> createEmployee(
             @Valid @RequestBody EmployeeRequest request) {
 
@@ -36,6 +38,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public ApiResponse<EmployeeResponse> getEmployee(
             @PathVariable Long id) {
 
@@ -47,6 +50,7 @@ public class EmployeeController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public ApiResponse<List<EmployeeResponse>> getAllEmployees() {
 
         return new ApiResponse<>(
@@ -57,6 +61,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<EmployeeResponse> updateEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeeRequest request) {
@@ -69,6 +74,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Void> deleteEmployee(
             @PathVariable Long id) {
 
@@ -82,6 +88,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/searchByName")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public ApiResponse<List<EmployeeResponse>> getAllEmployeesByFirstName(@Valid @RequestBody EmployeeSearchRequest employeeSearchRequest) {
 
         return new ApiResponse<>(
@@ -92,6 +99,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/searchByNameAndEmail")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public ApiResponse<List<EmployeeResponse>> getAEmployeeByNameAndEmail(@Valid @RequestBody EmployeeSearchRequest employeeSearchRequest) {
 
         return new ApiResponse<>(
@@ -102,6 +110,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/page")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public ApiResponse<PageResponse<EmployeeResponse>>
     getEmployees(
 
@@ -132,6 +141,7 @@ public class EmployeeController {
 
 
     @PostMapping("/search")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public ApiResponse<PageResponse<EmployeeResponse>>
     searchEmployees(
             @Valid

@@ -36,12 +36,16 @@ public class CustomUserDetailsService
                                         "User not found"
                                 )
                         );
-
+        System.out.println(
+                "Authority = ROLE_" + user.getRole().name()
+        );
         return org.springframework.security.core.userdetails.User
                 .builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .authorities("USER")
+                .authorities(
+                        "ROLE_" + user.getRole().name()
+                )
                 .build();
     }
 }

@@ -1,10 +1,7 @@
 package com.company.workforce.service;
 
 import com.company.workforce.constants.SortDirection;
-import com.company.workforce.dto.EmployeeFilterRequest;
-import com.company.workforce.dto.EmployeeRequest;
-import com.company.workforce.dto.EmployeeResponse;
-import com.company.workforce.dto.PageResponse;
+import com.company.workforce.dto.*;
 import com.company.workforce.entity.Employee;
 import org.springframework.data.repository.query.Param;
 
