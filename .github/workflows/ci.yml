@@ -65,7 +65,7 @@ jobs:
       # 9. Health Check (VERY IMPORTANT)
       - name: Check application
         run: |
-          curl -f http://localhost:8080 || (echo "App failed!" && docker-compose logs && exit 1)
+          curl -f http://localhost:8080 || (echo "App failed!" && docker compose logs && exit 1)
 
       # 10. Show logs always (debugging)
       - name: Print logs
