@@ -2,7 +2,7 @@ name: Full CI (Maven + Qodana + Docker)
 
 on:
   push:
-    branches: [ "main", "implementingCICDwithDocker" ]
+    branches: [ "main", "pushDockerHub" ]
   pull_request:
     branches: [ "main" ]
 
@@ -56,23 +56,14 @@ jobs:
       - name: Run docker compose
         run: docker compose up -d --build
 
-      # 8. Wait for app to be ready
-      - name: Wait for services
-        run: |
-          echo "Waiting for application to start..."
-          sleep 30
+      # 8 Login
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # 9. Health Check (VERY IMPORTANT)
-      - name: Check application
-        run: |
-          curl -f http://localhost:8080/actuator/health || (echo "App failed!" && docker compose logs && exit 1)
+      # 9 Tag image
+      - name: Tag Docker Image
+        run: docker tag workforce-app ${{ secrets.DOCKER_USERNAME }}/workforce-app:latest
 
-      # 10. Show logs always (debugging)
-      - name: Print logs
-        if: always()
-        run: docker compose logs
-
-      # 11. Shutdown
-      - name: Shutdown containers
-        if: always()
-        run: docker compose down
+      # 10 Push image
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/workforce-app:latest
