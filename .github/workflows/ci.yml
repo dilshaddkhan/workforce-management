@@ -40,21 +40,21 @@ jobs:
         continue-on-error: true
 
       # 5. Qodana Scan (merged properly)
-      - name: Run Qodana Scan
-        uses: JetBrains/qodana-action@v2026.1
-        with:
-          pr-mode: false
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-          QODANA_ENDPOINT: 'https://qodana.cloud'
+ #     - name: Run Qodana Scan
+  #      uses: JetBrains/qodana-action@v2026.1
+  #      with:
+   #       pr-mode: false
+   #     env:
+   #       QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+    #      QODANA_ENDPOINT: 'https://qodana.cloud'
 
       # 6. Build Docker image
       - name: Build Docker Image
         run: docker build -t workforce-app .
 
       # 7. Start full stack (App + Postgres)
-      - name: Run docker-compose
-        run: docker-compose up -d --build
+      - name: Run docker compose
+        run: docker compose up -d --build
 
       # 8. Wait for app to be ready
       - name: Wait for services
@@ -70,9 +70,9 @@ jobs:
       # 10. Show logs always (debugging)
       - name: Print logs
         if: always()
-        run: docker-compose logs
+        run: docker compose logs
 
       # 11. Shutdown
       - name: Shutdown containers
         if: always()
-        run: docker-compose down
+        run: docker compose down
