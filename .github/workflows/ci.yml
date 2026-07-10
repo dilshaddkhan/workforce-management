@@ -1,0 +1,78 @@
+name: Full CI (Maven + Qodana + Docker)
+
+on:
+  push:
+    branches: [ "main", "implementingCICDwithDocker" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-scan-docker:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+      security-events: write
+
+    steps:
+
+      # 1. Checkout
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup Java (MATCH Docker)
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # 3. Build JAR (REQUIRED for Docker)
+      - name: Build with Maven
+        run: mvn clean install
+
+      # 4. Dependency Graph (keep from your config)
+      - name: Update dependency graph
+        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+        continue-on-error: true
+
+      # 5. Qodana Scan (merged properly)
+      - name: Run Qodana Scan
+        uses: JetBrains/qodana-action@v2026.1
+        with:
+          pr-mode: false
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          QODANA_ENDPOINT: 'https://qodana.cloud'
+
+      # 6. Build Docker image
+      - name: Build Docker Image
+        run: docker build -t workforce-app .
+
+      # 7. Start full stack (App + Postgres)
+      - name: Run docker-compose
+        run: docker-compose up -d --build
+
+      # 8. Wait for app to be ready
+      - name: Wait for services
+        run: |
+          echo "Waiting for application to start..."
+          sleep 30
+
+      # 9. Health Check (VERY IMPORTANT)
+      - name: Check application
+        run: |
+          curl -f http://localhost:8080 || (echo "App failed!" && docker-compose logs && exit 1)
+
+      # 10. Show logs always (debugging)
+      - name: Print logs
+        if: always()
+        run: docker-compose logs
+
+      # 11. Shutdown
+      - name: Shutdown containers
+        if: always()
+        run: docker-compose down
