@@ -40,13 +40,13 @@ jobs:
         continue-on-error: true
 
       # 5. Qodana Scan (merged properly)
- #     - name: Run Qodana Scan
-  #      uses: JetBrains/qodana-action@v2026.1
-  #      with:
-   #       pr-mode: false
-   #     env:
-   #       QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-    #      QODANA_ENDPOINT: 'https://qodana.cloud'
+      - name: Run Qodana Scan
+        uses: JetBrains/qodana-action@v2026.1
+        with:
+         pr-mode: false
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          QODANA_ENDPOINT: 'https://qodana.cloud'
 
       # 6. Build Docker image
       - name: Build Docker Image
@@ -55,10 +55,6 @@ jobs:
       # 7. Start full stack (App + Postgres)
       - name: Run docker compose
         run: docker compose up -d --build
-
-      - name: Test Docker Login
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       # 8. Wait for app to be ready
       - name: Wait for services
