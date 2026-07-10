@@ -9,5 +9,6 @@ public final class PaginationConstants {
     public static final String DEFAULT_PAGE_STRING = "0";
     public static final String DEFAULT_SIZE_STRING = "10";
 
-    private PaginationConstants() {}
+    private PaginationConstants() {
+    }
 }

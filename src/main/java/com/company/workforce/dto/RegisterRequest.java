@@ -13,4 +13,5 @@ public record RegisterRequest(
 
         @NotBlank
         String password
-) {}
+) {
+}

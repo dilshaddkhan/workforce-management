@@ -28,10 +28,10 @@ public class CustomAccessDeniedHandler
         );
 
         response.getWriter().write("""
-            {
-              "success": false,
-              "message": "Access Denied"
-            }
-            """);
+                {
+                  "success": false,
+                  "message": "Access Denied"
+                }
+                """);
     }
 }

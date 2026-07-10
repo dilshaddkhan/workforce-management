@@ -7,7 +7,6 @@ import com.company.workforce.role.RoleType;
 import com.company.workforce.security.JwtService;
 import com.company.workforce.service.AuthService;
 import com.company.workforce.user.User;
-import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AuthServiceImpl
         implements AuthService {
 
@@ -26,12 +24,19 @@ public class AuthServiceImpl
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
+    public AuthServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager, JwtService jwtService, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Override
     public AuthResponse register(
             RegisterRequest request
     ) {
 
-        if(userRepository.existsByUsername(
+        if (userRepository.existsByUsername(
                 request.username()
         )) {
 
@@ -40,7 +45,7 @@ public class AuthServiceImpl
             );
         }
 
-        if(userRepository.existsByEmail(
+        if (userRepository.existsByEmail(
                 request.email()
         )) {
 

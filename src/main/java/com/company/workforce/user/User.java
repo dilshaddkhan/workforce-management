@@ -3,14 +3,14 @@ package com.company.workforce.user;
 import com.company.workforce.entity.BaseEntity;
 import com.company.workforce.role.RoleType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class User extends BaseEntity {
 
@@ -43,4 +43,16 @@ public class User extends BaseEntity {
 
     @Builder.Default
     private Boolean active = true;
+
+    public User(Long id, String username, String email, String password, RoleType role, Boolean active) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.active = active;
+    }
+
+    public User() {
+    }
 }

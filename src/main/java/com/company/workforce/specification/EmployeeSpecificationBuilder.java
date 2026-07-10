@@ -15,7 +15,7 @@ public class EmployeeSpecificationBuilder {
         Specification<Employee> specification =
                 (root, query, cb) -> cb.conjunction();
 
-        if(request.active() != null) {
+        if (request.active() != null) {
 
             specification =
                     specification.and(

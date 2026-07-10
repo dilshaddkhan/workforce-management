@@ -9,8 +9,7 @@ import org.mapstruct.MappingTarget;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface EmployeeMapperMAP
-{
+public interface EmployeeMapperMAP {
 
     Employee toEntity(EmployeeRequest request);
 

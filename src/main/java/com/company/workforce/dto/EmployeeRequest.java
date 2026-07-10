@@ -1,6 +1,8 @@
 package com.company.workforce.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
@@ -18,4 +20,5 @@ public record EmployeeRequest(
         @Positive(message = "Salary must be positive")
         BigDecimal salary
 
-) {}
+) {
+}

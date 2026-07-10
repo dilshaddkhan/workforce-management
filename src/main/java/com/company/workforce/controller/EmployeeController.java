@@ -7,7 +7,6 @@ import com.company.workforce.service.EmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -17,12 +16,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/employees")
-@RequiredArgsConstructor
 @Validated
 @SecurityRequirement(name = "bearerAuth")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -105,7 +107,7 @@ public class EmployeeController {
         return new ApiResponse<>(
                 true,
                 "Employees fetched successfully",
-                employeeService.getAllEmployeesByFirstNameAndEmail(employeeSearchRequest.firstName(),employeeSearchRequest.email())
+                employeeService.getAllEmployeesByFirstNameAndEmail(employeeSearchRequest.firstName(), employeeSearchRequest.email())
         );
     }
 

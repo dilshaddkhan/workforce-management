@@ -6,7 +6,8 @@ import com.company.workforce.entity.Employee;
 
 public final class EmployeeMapper {
 
-    private EmployeeMapper() {}
+    private EmployeeMapper() {
+    }
 
     public static Employee toEntity(
             EmployeeRequest request) {

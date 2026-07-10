@@ -1,39 +1,34 @@
 package com.company.workforce.service.impl;
 
-import com.company.workforce.constants.PaginationConstants;
 import com.company.workforce.constants.SortDirection;
-import com.company.workforce.dto.*;
+import com.company.workforce.dto.EmployeeFilterRequest;
+import com.company.workforce.dto.EmployeeRequest;
+import com.company.workforce.dto.EmployeeResponse;
+import com.company.workforce.dto.PageResponse;
 import com.company.workforce.entity.Employee;
 import com.company.workforce.exception.DuplicateEmployeeException;
 import com.company.workforce.exception.EmployeeNotFoundException;
 import com.company.workforce.mapper.EmployeeMapper;
 import com.company.workforce.mapper.EmployeeMapperMAP;
-import com.company.workforce.mapper.EmployeeMapperMAPImpl;
 import com.company.workforce.mapper.PageResponseMapper;
 import com.company.workforce.repository.EmployeeRepository;
 import com.company.workforce.service.EmployeeService;
-import com.company.workforce.specification.EmployeeSpecification;
 import com.company.workforce.specification.EmployeeSpecificationBuilder;
-import com.company.workforce.user.User;
 import com.company.workforce.util.PaginationUtil;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class EmployeeServiceImpl
         implements EmployeeService {
 
@@ -41,6 +36,13 @@ public class EmployeeServiceImpl
     private final EmployeeMapperMAP employeeMapperMAP;
     private final EmployeeSpecificationBuilder specificationBuilder;
     private final PageResponseMapper pageResponseMapper;
+
+    public EmployeeServiceImpl(EmployeeRepository repository, EmployeeMapperMAP employeeMapperMAP, EmployeeSpecificationBuilder specificationBuilder, PageResponseMapper pageResponseMapper) {
+        this.repository = repository;
+        this.employeeMapperMAP = employeeMapperMAP;
+        this.specificationBuilder = specificationBuilder;
+        this.pageResponseMapper = pageResponseMapper;
+    }
 
 
     @PostConstruct
@@ -71,7 +73,7 @@ public class EmployeeServiceImpl
 /*
         return EmployeeMapper.toResponse(saved);
 */
-        return  employeeMapperMAP.toResponse(saved);
+        return employeeMapperMAP.toResponse(saved);
 
     }
 
@@ -84,7 +86,7 @@ public class EmployeeServiceImpl
                                 new EmployeeNotFoundException(
                                         "Employee not found"));
          return EmployeeMapper.toResponse(employee);*/
-        return  employeeMapperMAP.toResponse(repository.findById(id)
+        return employeeMapperMAP.toResponse(repository.findById(id)
                 .orElseThrow(() ->
                         new EmployeeNotFoundException(
                                 "Employee not found")));
@@ -108,7 +110,7 @@ return repository.findAll().stream().filter((employee -> employee.getSalary().co
             Long id,
             EmployeeRequest request) {
 
-          Employee employee =
+        Employee employee =
                 repository.findById(id)
                         .orElseThrow(() ->
                                 new EmployeeNotFoundException(
@@ -182,7 +184,7 @@ return repository.findAll().stream().filter((employee -> employee.getSalary().co
                 .map(EmployeeMapper::toResponse)
                 .toList();*/
 
-        return repository.findEmployee(firstName,email)
+        return repository.findEmployee(firstName, email)
                 .stream()
                 .map(employeeMapperMAP::toResponse)
                 .toList();

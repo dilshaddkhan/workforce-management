@@ -14,4 +14,5 @@ public record EmployeeSearchRequest(
         @Email(message = "Invalid email")
         String email
 
-) {}
+) {
+}

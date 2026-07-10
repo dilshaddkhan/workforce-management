@@ -18,4 +18,5 @@ public record PageResponse<T>(
 
         boolean last
 
-) {}
+) {
+}

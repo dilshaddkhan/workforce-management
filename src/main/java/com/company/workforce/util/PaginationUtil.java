@@ -28,15 +28,15 @@ public final class PaginationUtil {
         }
     }
 
-        public static int normalizeSize(
-                int size
-        ) {
+    public static int normalizeSize(
+            int size
+    ) {
 
-            return Math.min(
-                    size,
-                    PaginationConstants.MAX_PAGE_SIZE
-            );
-        }
+        return Math.min(
+                size,
+                PaginationConstants.MAX_PAGE_SIZE
+        );
+    }
 
     public static Pageable buildPageable(
             int page,
