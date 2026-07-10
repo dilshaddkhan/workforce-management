@@ -3,4 +3,4 @@
 #               as its contents will be included in the Qodana report.          #
 #################################################################################
 version: "1.0"
-linter: qodana-jvm
+linter: jetbrains/qodana-jvm

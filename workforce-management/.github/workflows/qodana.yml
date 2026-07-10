@@ -2,17 +2,29 @@ name: Qodana Scan
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 jobs:
   qodana:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Run Qodana
-        uses: JetBrains/qodana-action@v2023.3
+        uses: JetBrains/qodana-action@v2026.1
         with:
-          args: --save-report
+          pr-mode: false
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          QODANA_ENDPOINT: 'https://qodana.cloud'
