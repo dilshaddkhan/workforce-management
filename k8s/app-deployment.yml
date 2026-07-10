@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workforce-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workforce-app
+  template:
+    metadata:
+      labels:
+        app: workforce-app
+    spec:
+      containers:
+        - name: workforce-app
+          image: dilshaddkhan23/workforce-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres-service:5432/workforce_db
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
