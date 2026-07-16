@@ -2,7 +2,7 @@ name: Full CI (Maven + Qodana + Docker)
 
 on:
   push:
-    branches: [ "main", "pushDockerHub" ]
+    branches: [ "main", "pushDockerHub" , "KubernetesImplementation"]
   pull_request:
     branches: [ "main" ]
 
